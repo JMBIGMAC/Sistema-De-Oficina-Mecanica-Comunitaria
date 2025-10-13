@@ -135,3 +135,69 @@ class MessageReply(models.Model):
 
     def __str__(self):
         return f"Reply to {self.message.subject} by {self.from_user.username}"
+
+# Mechanical Workshop Models
+
+class Cliente(models.Model):
+    """Customer/Client model for the mechanical workshop"""
+    nome = models.CharField(max_length=200, verbose_name='Nome')
+    cpf_cnpj = models.CharField(max_length=18, unique=True, verbose_name='CPF/CNPJ')
+    telefone = models.CharField(max_length=20, verbose_name='Telefone')
+    email = models.EmailField(verbose_name='E-mail')
+    endereco = models.TextField(verbose_name='Endereço')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['nome']
+        verbose_name = 'Cliente'
+        verbose_name_plural = 'Clientes'
+
+    def __str__(self):
+        return f"{self.nome} - {self.cpf_cnpj}"
+
+class Veiculo(models.Model):
+    """Vehicle model"""
+    TIPO_COMBUSTIVEL_CHOICES = [
+        ('gasolina', 'Gasolina'),
+        ('alcool', 'Álcool'),
+        ('flex', 'Flex'),
+        ('diesel', 'Diesel'),
+        ('eletrico', 'Elétrico'),
+        ('hibrido', 'Híbrido'),
+    ]
+    
+    placa = models.CharField(max_length=10, primary_key=True, verbose_name='Placa')
+    cliente = models.ForeignKey(Cliente, on_delete=models.PROTECT, related_name='veiculos', verbose_name='Cliente')
+    marca = models.CharField(max_length=50, verbose_name='Marca')
+    modelo = models.CharField(max_length=100, verbose_name='Modelo')
+    ano = models.IntegerField(verbose_name='Ano')
+    cor = models.CharField(max_length=30, verbose_name='Cor')
+    quilometragem = models.IntegerField(verbose_name='Quilometragem')
+    chassi = models.CharField(max_length=17, unique=True, verbose_name='Chassi')
+    tipo_combustivel = models.CharField(max_length=10, choices=TIPO_COMBUSTIVEL_CHOICES, verbose_name='Tipo de Combustível')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['placa']
+        verbose_name = 'Veículo'
+        verbose_name_plural = 'Veículos'
+
+    def __str__(self):
+        return f"{self.placa} - {self.marca} {self.modelo}"
+
+class Servico(models.Model):
+    """Service catalog model"""
+    descricao = models.CharField(max_length=200, verbose_name='Descrição')
+    preco_padrao = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Preço Padrão')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['descricao']
+        verbose_name = 'Serviço'
+        verbose_name_plural = 'Serviços'
+
+    def __str__(self):
+        return f"{self.descricao} - R$ {self.preco_padrao}"

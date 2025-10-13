@@ -8,7 +8,8 @@ from rest_framework.authtoken.models import Token
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from django.db import transaction, OperationalError
-from .models import UserProfile, Message, MessageReply, MessageSettings, Role, Page, PagePermission
+from .models import UserProfile, Message, MessageReply, MessageSettings, Role, Page, PagePermission, Cliente, Veiculo, Servico
+from .serializers import ClienteSerializer, VeiculoSerializer, ServicoSerializer
 import json
 import time
 from functools import wraps
@@ -825,3 +826,190 @@ def message_settings(request):
                 'updatedAt': settings_obj.updated_at.isoformat(),
             }
         })
+
+
+# Workshop Management Views
+
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def clientes_list(request):
+    """List all clientes or create a new cliente"""
+    if request.method == 'GET':
+        search = request.query_params.get('search', '')
+        clientes = Cliente.objects.all()
+        
+        if search:
+            clientes = clientes.filter(
+                nome__icontains=search
+            ) | clientes.filter(
+                cpf_cnpj__icontains=search
+            )
+        
+        clientes = clientes.order_by('nome')
+        serializer = ClienteSerializer(clientes, many=True)
+        return Response({'clientes': serializer.data})
+    
+    elif request.method == 'POST':
+        serializer = ClienteSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+@permission_classes([IsAuthenticated])
+def clientes_detail(request, pk):
+    """Retrieve, update or delete a cliente"""
+    try:
+        cliente = Cliente.objects.get(pk=pk)
+    except Cliente.DoesNotExist:
+        return Response({'error': 'Cliente não encontrado'}, status=status.HTTP_404_NOT_FOUND)
+    
+    if request.method == 'GET':
+        serializer = ClienteSerializer(cliente)
+        return Response(serializer.data)
+    
+    elif request.method == 'PUT':
+        serializer = ClienteSerializer(cliente, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    elif request.method == 'DELETE':
+        # Business rule: Cannot delete cliente with veiculos
+        if cliente.veiculos.exists():
+            return Response({
+                'error': 'Não é possível excluir cliente com veículos cadastrados. Exclua os veículos primeiro.'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        cliente.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def veiculos_list(request):
+    """List all veiculos or create a new veiculo"""
+    if request.method == 'GET':
+        search = request.query_params.get('search', '')
+        cliente_id = request.query_params.get('cliente_id', '')
+        
+        veiculos = Veiculo.objects.select_related('cliente').all()
+        
+        if search:
+            veiculos = veiculos.filter(
+                placa__icontains=search
+            ) | veiculos.filter(
+                modelo__icontains=search
+            ) | veiculos.filter(
+                marca__icontains=search
+            ) | veiculos.filter(
+                cliente__nome__icontains=search
+            )
+        
+        if cliente_id:
+            veiculos = veiculos.filter(cliente_id=cliente_id)
+        
+        veiculos = veiculos.order_by('placa')
+        serializer = VeiculoSerializer(veiculos, many=True)
+        return Response({'veiculos': serializer.data})
+    
+    elif request.method == 'POST':
+        serializer = VeiculoSerializer(data=request.data)
+        if serializer.is_valid():
+            # Validate that cliente exists
+            cliente_id = request.data.get('cliente')
+            try:
+                Cliente.objects.get(pk=cliente_id)
+            except Cliente.DoesNotExist:
+                return Response(
+                    {'error': 'Cliente não encontrado'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+@permission_classes([IsAuthenticated])
+def veiculos_detail(request, placa):
+    """Retrieve, update or delete a veiculo"""
+    try:
+        veiculo = Veiculo.objects.select_related('cliente').get(placa=placa)
+    except Veiculo.DoesNotExist:
+        return Response({'error': 'Veículo não encontrado'}, status=status.HTTP_404_NOT_FOUND)
+    
+    if request.method == 'GET':
+        serializer = VeiculoSerializer(veiculo)
+        return Response(serializer.data)
+    
+    elif request.method == 'PUT':
+        # Don't allow changing the primary key (placa)
+        data = request.data.copy()
+        data['placa'] = placa
+        
+        serializer = VeiculoSerializer(veiculo, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    elif request.method == 'DELETE':
+        # Business rule: Cannot delete veiculo with service orders (to be implemented)
+        # For now, allow deletion
+        veiculo.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def servicos_list(request):
+    """List all servicos or create a new servico"""
+    if request.method == 'GET':
+        search = request.query_params.get('search', '')
+        servicos = Servico.objects.all()
+        
+        if search:
+            servicos = servicos.filter(descricao__icontains=search)
+        
+        servicos = servicos.order_by('descricao')
+        serializer = ServicoSerializer(servicos, many=True)
+        return Response({'servicos': serializer.data})
+    
+    elif request.method == 'POST':
+        serializer = ServicoSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+@permission_classes([IsAuthenticated])
+def servicos_detail(request, pk):
+    """Retrieve, update or delete a servico"""
+    try:
+        servico = Servico.objects.get(pk=pk)
+    except Servico.DoesNotExist:
+        return Response({'error': 'Serviço não encontrado'}, status=status.HTTP_404_NOT_FOUND)
+    
+    if request.method == 'GET':
+        serializer = ServicoSerializer(servico)
+        return Response(serializer.data)
+    
+    elif request.method == 'PUT':
+        serializer = ServicoSerializer(servico, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    elif request.method == 'DELETE':
+        # Business rule: Consider restriction for servicos already used in service orders
+        # For now, allow deletion
+        servico.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
