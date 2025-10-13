@@ -153,3 +153,25 @@ export interface Servico {
   created_at: string;
   updated_at: string;
 }
+
+export interface OrdemServico {
+  id: number;
+  cliente: number;
+  cliente_nome?: string;
+  veiculo: string; // placa
+  veiculo_info?: string;
+  servico: number;
+  servico_descricao?: string;
+  descricao_problema: string;
+  observacoes: string;
+  preco_final: number;
+  status: 'pendente' | 'aprovado' | 'em_andamento' | 'concluido' | 'cancelado';
+  status_pagamento: 'pendente' | 'parcial' | 'pago';
+  data_solicitacao: string;
+  data_aprovacao?: string;
+  data_conclusao?: string;
+  mecanico_responsavel?: number;
+  mecanico_nome?: string;
+  created_at: string;
+  updated_at: string;
+}

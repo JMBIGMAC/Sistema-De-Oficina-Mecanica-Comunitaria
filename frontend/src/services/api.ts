@@ -701,6 +701,111 @@ const workshopApi = {
       return { success: false, error: 'Network error' };
     }
   },
+
+  // Ordens de Servico
+  async getOrdensServico(status?: string, clienteId?: number) {
+    try {
+      let url = `${API_BASE_URL}/ordens-servico/`;
+      const params = new URLSearchParams();
+      
+      if (status) params.append('status', status);
+      if (clienteId) params.append('cliente_id', clienteId.toString());
+      
+      if (params.toString()) url += `?${params.toString()}`;
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: getAuthHeaders(),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        return { success: false, error: errorData.error || 'Failed to fetch ordens de servico' };
+      }
+
+      const data = await response.json();
+      return { success: true, data: data.ordens_servico };
+    } catch (error) {
+      return { success: false, error: 'Network error' };
+    }
+  },
+
+  async getOrdemServico(id: number) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/ordens-servico/${id}/`, {
+        method: 'GET',
+        headers: getAuthHeaders(),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        return { success: false, error: errorData.error || 'Failed to fetch ordem de servico' };
+      }
+
+      const data = await response.json();
+      return { success: true, data };
+    } catch (error) {
+      return { success: false, error: 'Network error' };
+    }
+  },
+
+  async createOrdemServico(ordemData: any) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/ordens-servico/`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(ordemData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        return { success: false, error: errorData };
+      }
+
+      const data = await response.json();
+      return { success: true, data };
+    } catch (error) {
+      return { success: false, error: 'Network error' };
+    }
+  },
+
+  async updateOrdemServico(id: number, ordemData: any) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/ordens-servico/${id}/`, {
+        method: 'PUT',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(ordemData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        return { success: false, error: errorData };
+      }
+
+      const data = await response.json();
+      return { success: true, data };
+    } catch (error) {
+      return { success: false, error: 'Network error' };
+    }
+  },
+
+  async deleteOrdemServico(id: number) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/ordens-servico/${id}/`, {
+        method: 'DELETE',
+        headers: getAuthHeaders(),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        return { success: false, error: errorData.error || 'Failed to delete ordem de servico' };
+      }
+
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: 'Network error' };
+    }
+  },
 };
 
 const apiExports = {

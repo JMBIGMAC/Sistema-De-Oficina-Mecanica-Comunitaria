@@ -8,8 +8,8 @@ from rest_framework.authtoken.models import Token
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from django.db import transaction, OperationalError
-from .models import UserProfile, Message, MessageReply, MessageSettings, Role, Page, PagePermission, Cliente, Veiculo, Servico
-from .serializers import ClienteSerializer, VeiculoSerializer, ServicoSerializer
+from .models import UserProfile, Message, MessageReply, MessageSettings, Role, Page, PagePermission, Cliente, Veiculo, Servico, OrdemServico
+from .serializers import ClienteSerializer, VeiculoSerializer, ServicoSerializer, OrdemServicoSerializer
 import json
 import time
 from functools import wraps
@@ -1013,3 +1013,85 @@ def servicos_detail(request, pk):
         # For now, allow deletion
         servico.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# Ordem de Serviço Views
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def ordens_servico_list(request):
+    """List all service orders or create a new one"""
+    if request.method == 'GET':
+        ordens = OrdemServico.objects.select_related('cliente', 'veiculo', 'servico', 'mecanico_responsavel').all()
+        
+        # Filter by status if provided
+        status_filter = request.query_params.get('status', '')
+        if status_filter:
+            ordens = ordens.filter(status=status_filter)
+        
+        # Filter by cliente if provided
+        cliente_id = request.query_params.get('cliente_id', '')
+        if cliente_id:
+            ordens = ordens.filter(cliente_id=cliente_id)
+        
+        # Filter by current user if they are a client (not admin/moderator)
+        user = request.user
+        if user.profile.get_role_name() == 'client':
+            # Clients can only see their own service orders
+            try:
+                cliente = Cliente.objects.get(email=user.email)
+                ordens = ordens.filter(cliente=cliente)
+            except Cliente.DoesNotExist:
+                return Response({'ordens_servico': []})
+        
+        ordens = ordens.order_by('-data_solicitacao')
+        serializer = OrdemServicoSerializer(ordens, many=True)
+        return Response({'ordens_servico': serializer.data})
+    
+    elif request.method == 'POST':
+        serializer = OrdemServicoSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+@permission_classes([IsAuthenticated])
+def ordens_servico_detail(request, pk):
+    """Retrieve, update or delete a service order"""
+    try:
+        ordem = OrdemServico.objects.select_related('cliente', 'veiculo', 'servico', 'mecanico_responsavel').get(pk=pk)
+    except OrdemServico.DoesNotExist:
+        return Response({'error': 'Ordem de serviço não encontrada'}, status=status.HTTP_404_NOT_FOUND)
+    
+    # Check permissions - clients can only see their own orders
+    user = request.user
+    if user.profile.get_role_name() == 'client':
+        try:
+            cliente = Cliente.objects.get(email=user.email)
+            if ordem.cliente != cliente:
+                return Response({'error': 'Acesso negado'}, status=status.HTTP_403_FORBIDDEN)
+        except Cliente.DoesNotExist:
+            return Response({'error': 'Cliente não encontrado'}, status=status.HTTP_404_NOT_FOUND)
+    
+    if request.method == 'GET':
+        serializer = OrdemServicoSerializer(ordem)
+        return Response(serializer.data)
+    
+    elif request.method == 'PUT':
+        serializer = OrdemServicoSerializer(ordem, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    elif request.method == 'DELETE':
+        # Only allow deletion if order is pending or cancelled
+        if ordem.status not in ['pendente', 'cancelado']:
+            return Response(
+                {'error': 'Apenas ordens pendentes ou canceladas podem ser excluídas'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        ordem.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+

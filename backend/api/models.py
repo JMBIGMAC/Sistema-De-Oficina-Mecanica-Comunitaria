@@ -201,3 +201,51 @@ class Servico(models.Model):
 
     def __str__(self):
         return f"{self.descricao} - R$ {self.preco_padrao}"
+
+class OrdemServico(models.Model):
+    """Service Order model - connects Cliente, Veiculo, and Servico"""
+    STATUS_CHOICES = [
+        ('pendente', 'Pendente'),
+        ('aprovado', 'Aprovado'),
+        ('em_andamento', 'Em Andamento'),
+        ('concluido', 'Concluído'),
+        ('cancelado', 'Cancelado'),
+    ]
+    
+    PAGAMENTO_CHOICES = [
+        ('pendente', 'Pendente'),
+        ('parcial', 'Parcial'),
+        ('pago', 'Pago'),
+    ]
+    
+    cliente = models.ForeignKey(Cliente, on_delete=models.PROTECT, related_name='ordens_servico', verbose_name='Cliente')
+    veiculo = models.ForeignKey(Veiculo, on_delete=models.PROTECT, related_name='ordens_servico', verbose_name='Veículo')
+    servico = models.ForeignKey(Servico, on_delete=models.PROTECT, related_name='ordens_servico', verbose_name='Serviço')
+    descricao_problema = models.TextField(verbose_name='Descrição do Problema', blank=True)
+    observacoes = models.TextField(verbose_name='Observações', blank=True)
+    
+    preco_final = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Preço Final', null=True, blank=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pendente', verbose_name='Status')
+    status_pagamento = models.CharField(max_length=20, choices=PAGAMENTO_CHOICES, default='pendente', verbose_name='Status do Pagamento')
+    
+    data_solicitacao = models.DateTimeField(auto_now_add=True, verbose_name='Data de Solicitação')
+    data_aprovacao = models.DateTimeField(null=True, blank=True, verbose_name='Data de Aprovação')
+    data_conclusao = models.DateTimeField(null=True, blank=True, verbose_name='Data de Conclusão')
+    
+    mecanico_responsavel = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='ordens_mecanico', verbose_name='Mecânico Responsável')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['-data_solicitacao']
+        verbose_name = 'Ordem de Serviço'
+        verbose_name_plural = 'Ordens de Serviço'
+    
+    def __str__(self):
+        return f"OS #{self.id} - {self.cliente.nome} - {self.veiculo.placa} - {self.servico.descricao}"
+    
+    def save(self, *args, **kwargs):
+        # Set preco_final from servico.preco_padrao if not set
+        if self.preco_final is None and self.servico:
+            self.preco_final = self.servico.preco_padrao
+        super().save(*args, **kwargs)
