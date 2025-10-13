@@ -14,7 +14,13 @@ import {
   Text,
   Card,
   CardBody,
+  SimpleGrid,
+  Icon,
+  HStack,
+  Divider,
 } from '@chakra-ui/react';
+import { FaWrench, FaCalendarAlt, FaPhone, FaEnvelope } from 'react-icons/fa';
+import { Link as RouterLink } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { messagesApi } from '../services/api';
 
@@ -28,14 +34,15 @@ const ContactUs: React.FC = () => {
   });
 
   const bgColor = useColorModeValue('white', 'gray.800');
+  const cardBg = useColorModeValue('gray.50', 'gray.700');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!formData.subject || !formData.message) {
       toast({
-        title: 'Missing information',
-        description: 'Please fill in all fields',
+        title: 'Informações faltando',
+        description: 'Por favor, preencha todos os campos',
         status: 'warning',
         duration: 3000,
         isClosable: true,
@@ -51,8 +58,8 @@ const ContactUs: React.FC = () => {
       
       if (response.success) {
         toast({
-          title: 'Message sent',
-          description: 'Your message has been sent successfully. We\'ll get back to you soon!',
+          title: 'Mensagem enviada',
+          description: 'Sua mensagem foi enviada com sucesso. Entraremos em contato em breve!',
           status: 'success',
           duration: 5000,
           isClosable: true,
@@ -61,8 +68,8 @@ const ContactUs: React.FC = () => {
         setFormData({ subject: '', message: '' });
       } else {
         toast({
-          title: 'Error sending message',
-          description: response.error || 'Failed to send message',
+          title: 'Erro ao enviar mensagem',
+          description: response.error || 'Falha ao enviar mensagem',
           status: 'error',
           duration: 5000,
           isClosable: true,
@@ -70,8 +77,8 @@ const ContactUs: React.FC = () => {
       }
     } catch (error: any) {
       toast({
-        title: 'Error sending message',
-        description: error.message || 'Failed to send message',
+        title: 'Erro ao enviar mensagem',
+        description: error.message || 'Falha ao enviar mensagem',
         status: 'error',
         duration: 5000,
         isClosable: true,
@@ -82,23 +89,60 @@ const ContactUs: React.FC = () => {
   };
 
   return (
-    <Container maxW="container.md" py={{ base: 6, md: 10 }} px={{ base: 4, md: 6 }}>
+    <Container maxW="container.xl" py={{ base: 6, md: 10 }} px={{ base: 4, md: 6 }}>
       <VStack spacing={{ base: 6, md: 8 }} align="stretch">
         <Box textAlign="center">
           <Heading size={{ base: 'xl', md: '2xl' }} mb={4}>
-            Contact Us
+            Entre em Contato
           </Heading>
           <Text color="gray.500" fontSize={{ base: 'md', md: 'lg' }}>
-            Have a question or need support? Send us a message and we'll respond as soon as possible.
+            Precisa de ajuda ou quer solicitar um serviço? Envie-nos uma mensagem!
           </Text>
         </Box>
+
+        {/* Quick Actions */}
+        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6}>
+          <Card bg={cardBg} as={RouterLink} to="/home/payment" _hover={{ transform: 'translateY(-4px)', shadow: 'lg' }} transition="all 0.3s">
+            <CardBody textAlign="center">
+              <Icon as={FaWrench as any} boxSize={10} color="brand.500" mb={3} />
+              <Heading size="sm" mb={2}>Solicitar Serviço</Heading>
+              <Text fontSize="sm" color="gray.600">
+                Agende manutenção para seu veículo
+              </Text>
+            </CardBody>
+          </Card>
+
+          <Card bg={cardBg}>
+            <CardBody textAlign="center">
+              <Icon as={FaPhone as any} boxSize={10} color="secondary.500" mb={3} />
+              <Heading size="sm" mb={2}>Telefone</Heading>
+              <Text fontSize="sm" color="gray.600">
+                (11) 9999-9999
+              </Text>
+            </CardBody>
+          </Card>
+
+          <Card bg={cardBg}>
+            <CardBody textAlign="center">
+              <Icon as={FaEnvelope as any} boxSize={10} color="accent.500" mb={3} />
+              <Heading size="sm" mb={2}>Email</Heading>
+              <Text fontSize="sm" color="gray.600">
+                contato@oficina.com.br
+              </Text>
+            </CardBody>
+          </Card>
+        </SimpleGrid>
+
+        <Divider />
 
         <Card bg={bgColor}>
           <CardBody p={{ base: 4, md: 6 }}>
             <form onSubmit={handleSubmit}>
               <VStack spacing={{ base: 4, md: 6 }}>
+                <Heading size="md" mb={2}>Envie uma Mensagem</Heading>
+
                 <FormControl isRequired>
-                  <FormLabel fontSize={{ base: 'sm', md: 'md' }}>Your Email</FormLabel>
+                  <FormLabel fontSize={{ base: 'sm', md: 'md' }}>Seu Email</FormLabel>
                   <Input
                     type="email"
                     value={user?.email || ''}
@@ -109,9 +153,9 @@ const ContactUs: React.FC = () => {
                 </FormControl>
 
                 <FormControl isRequired>
-                  <FormLabel fontSize={{ base: 'sm', md: 'md' }}>Subject</FormLabel>
+                  <FormLabel fontSize={{ base: 'sm', md: 'md' }}>Assunto</FormLabel>
                   <Input
-                    placeholder="Brief description of your inquiry"
+                    placeholder="Breve descrição do seu contato"
                     value={formData.subject}
                     onChange={(e) =>
                       setFormData({ ...formData, subject: e.target.value })
@@ -121,9 +165,9 @@ const ContactUs: React.FC = () => {
                 </FormControl>
 
                 <FormControl isRequired>
-                  <FormLabel fontSize={{ base: 'sm', md: 'md' }}>Message</FormLabel>
+                  <FormLabel fontSize={{ base: 'sm', md: 'md' }}>Mensagem</FormLabel>
                   <Textarea
-                    placeholder="Tell us more about your question or issue..."
+                    placeholder="Conte-nos mais sobre sua dúvida ou necessidade..."
                     value={formData.message}
                     onChange={(e) =>
                       setFormData({ ...formData, message: e.target.value })
@@ -135,14 +179,14 @@ const ContactUs: React.FC = () => {
 
                 <Button
                   type="submit"
-                  colorScheme="blue"
+                  colorScheme="brand"
                   size={{ base: 'md', md: 'lg' }}
                   width="full"
                   isLoading={loading}
                   mt={{ base: 2, md: 0 }}
                   minHeight={{ base: '48px', md: '56px' }}
                 >
-                  Send Message
+                  Enviar Mensagem
                 </Button>
               </VStack>
             </form>
@@ -151,9 +195,10 @@ const ContactUs: React.FC = () => {
 
         <Box bg={useColorModeValue('blue.50', 'blue.900')} p={{ base: 4, md: 6 }} borderRadius="md">
           <VStack spacing={2} align="start">
-            <Heading size={{ base: 'xs', md: 'sm' }}>Other ways to reach us</Heading>
-            <Text fontSize="sm">Email: support@example.com</Text>
-            <Text fontSize="sm">Phone: +1 (555) 123-4567</Text>
+            <Heading size={{ base: 'xs', md: 'sm' }}>Outras formas de contato</Heading>
+            <Text fontSize="sm">📧 Email: contato@oficina.com.br</Text>
+            <Text fontSize="sm">📞 Telefone: (11) 9999-9999</Text>
+            <Text fontSize="sm">🕒 Horário: Segunda a Sexta, 8h às 18h</Text>
             <Text fontSize="sm">Hours: Monday - Friday, 9:00 AM - 5:00 PM</Text>
           </VStack>
         </Box>
