@@ -52,9 +52,9 @@ templateV2/
 erDiagram
     CLIENTE ||--o{ VEICULO : "possui"
     CLIENTE {
-        id PK
+        id
         nome
-        cpf_cnpj UNIQUE
+        cpf_cnpj
         telefone
         email
         endereco
@@ -62,26 +62,28 @@ erDiagram
         updated_at
     }
     VEICULO {
-        placa PK
-        cliente_id FK
+        placa
+        cliente_id
         marca
         modelo
         ano
         cor
         quilometragem
-        chassi UNIQUE
+        chassi
         tipo_combustivel
         created_at
         updated_at
     }
     SERVICO {
-        id PK
-        descricao UNIQUE
+        id
+        descricao
         preco_padrao
         created_at
         updated_at
     }
 ```
+
+> Para visualizar o diagrama no GitHub, acesse o arquivo diretamente pelo navegador ou utilize extensões de visualização Mermaid.
 
 **Cardinalidade:** Um cliente pode ter vários veículos; cada veículo pertence a um cliente.
 **Chaves:** Cliente (id), Veículo (placa), Serviço (id).
