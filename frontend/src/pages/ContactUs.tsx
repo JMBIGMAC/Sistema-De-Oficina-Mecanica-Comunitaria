@@ -16,10 +16,9 @@ import {
   CardBody,
   SimpleGrid,
   Icon,
-  HStack,
   Divider,
 } from '@chakra-ui/react';
-import { FaWrench, FaCalendarAlt, FaPhone, FaEnvelope } from 'react-icons/fa';
+import { FaWrench, FaPhone, FaEnvelope } from 'react-icons/fa';
 import { Link as RouterLink } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { messagesApi } from '../services/api';
@@ -199,7 +198,6 @@ const ContactUs: React.FC = () => {
             <Text fontSize="sm">📧 Email: contato@oficina.com.br</Text>
             <Text fontSize="sm">📞 Telefone: (11) 9999-9999</Text>
             <Text fontSize="sm">🕒 Horário: Segunda a Sexta, 8h às 18h</Text>
-            <Text fontSize="sm">Hours: Monday - Friday, 9:00 AM - 5:00 PM</Text>
           </VStack>
         </Box>
       </VStack>
