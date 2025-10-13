@@ -45,6 +45,7 @@ import {
 import { AddIcon, EditIcon, DeleteIcon, SearchIcon } from '@chakra-ui/icons';
 import { workshopApi } from '../services/api';
 import { Servico } from '../types';
+import { formatCurrency } from '../utils/priceUtils';
 
 const ServicosManagement: React.FC = () => {
   const [servicos, setServicos] = useState<Servico[]>([]);
@@ -184,13 +185,6 @@ const ServicosManagement: React.FC = () => {
     }
   };
 
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-    }).format(value);
-  };
-
   return (
     <Container maxW="container.xl" py={8}>
       <VStack spacing={6} align="stretch">
@@ -240,7 +234,7 @@ const ServicosManagement: React.FC = () => {
                   <Tr key={servico.id}>
                     <Td>{servico.descricao}</Td>
                     <Td isNumeric fontWeight="bold" color="green.600">
-                      {formatCurrency(parseFloat(String(servico.preco_padrao)))}
+                      {formatCurrency(servico.preco_padrao)}
                     </Td>
                     <Td>
                       <HStack spacing={2}>

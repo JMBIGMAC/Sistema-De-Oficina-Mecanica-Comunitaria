@@ -26,6 +26,7 @@ import {
 import { FaLock, FaCheckCircle, FaWrench } from 'react-icons/fa';
 import { workshopApi } from '../services/api';
 import { Servico, Veiculo, Cliente } from '../types';
+import { formatPrice } from '../utils/priceUtils';
 
 const Payment: React.FC = () => {
   const bgColor = useColorModeValue('gray.50', 'gray.900');
@@ -193,7 +194,7 @@ const Payment: React.FC = () => {
                             </Text>
                             <HStack justify="center" mt={2}>
                               <Text fontSize="2xl" fontWeight="bold">
-                                R$ {parseFloat(String(servico.preco_padrao)).toFixed(2)}
+                                R$ {formatPrice(servico.preco_padrao)}
                               </Text>
                             </HStack>
                           </Box>
@@ -256,7 +257,7 @@ const Payment: React.FC = () => {
                         >
                           {servicos.map((servico) => (
                             <option key={servico.id} value={servico.id}>
-                              {servico.descricao} - R$ {parseFloat(String(servico.preco_padrao)).toFixed(2)}
+                              {servico.descricao} - R$ {formatPrice(servico.preco_padrao)}
                             </option>
                           ))}
                         </Select>
@@ -285,7 +286,7 @@ const Payment: React.FC = () => {
                             <NumberInputField placeholder="0.00" />
                           </NumberInput>
                           <Text fontSize="sm" color="gray.500" mt={1}>
-                            Preço padrão: R$ {parseFloat(String(selectedServico.preco_padrao)).toFixed(2)}
+                            Preço padrão: R$ {formatPrice(selectedServico.preco_padrao)}
                           </Text>
                         </FormControl>
                       )}

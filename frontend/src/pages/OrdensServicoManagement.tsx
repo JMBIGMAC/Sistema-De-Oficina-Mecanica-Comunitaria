@@ -38,6 +38,7 @@ import {
 import { FaEdit, FaTrash, FaPlus, FaSearch } from 'react-icons/fa';
 import { workshopApi } from '../services/api';
 import { OrdemServico, Cliente, Veiculo, Servico } from '../types';
+import { formatCurrency, formatPrice } from '../utils/priceUtils';
 
 const OrdensServicoManagement: React.FC = () => {
   const toast = useToast();
@@ -71,19 +72,18 @@ const OrdensServicoManagement: React.FC = () => {
   const borderColor = useColorModeValue('gray.200', 'gray.700');
 
   useEffect(() => {
-    fetchData();
+    // Load static data only once on mount
+    loadStaticData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    // Reload orders when status filter changes
+    fetchOrdens();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [statusFilter]);
 
-  const fetchData = async () => {
-    setLoading(true);
-
-    // Fetch ordens
-    const ordensResp = await workshopApi.getOrdensServico(statusFilter || undefined);
-    if (ordensResp.success && ordensResp.data) {
-      setOrdens(ordensResp.data);
-    }
-
+  const loadStaticData = async () => {
     // Fetch clientes
     const clientesResp = await workshopApi.getClientes();
     if (clientesResp.success && clientesResp.data) {
@@ -101,8 +101,19 @@ const OrdensServicoManagement: React.FC = () => {
     if (servicosResp.success && servicosResp.data) {
       setServicos(servicosResp.data);
     }
+  };
 
+  const fetchOrdens = async () => {
+    setLoading(true);
+    const ordensResp = await workshopApi.getOrdensServico(statusFilter || undefined);
+    if (ordensResp.success && ordensResp.data) {
+      setOrdens(ordensResp.data);
+    }
     setLoading(false);
+  };
+
+  const fetchData = async () => {
+    await Promise.all([loadStaticData(), fetchOrdens()]);
   };
 
   const handleOpenCreate = () => {
@@ -251,13 +262,6 @@ const OrdensServicoManagement: React.FC = () => {
         {statusLabels[status]}
       </Badge>
     );
-  };
-
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-    }).format(value);
   };
 
   const filteredVeiculos = formData.cliente_id
@@ -425,7 +429,7 @@ const OrdensServicoManagement: React.FC = () => {
                   >
                     {servicos.map((servico) => (
                       <option key={servico.id} value={servico.id}>
-                        {servico.descricao} - R$ {parseFloat(String(servico.preco_padrao)).toFixed(2)}
+                        {servico.descricao} - R$ {formatPrice(servico.preco_padrao)}
                       </option>
                     ))}
                   </Select>
