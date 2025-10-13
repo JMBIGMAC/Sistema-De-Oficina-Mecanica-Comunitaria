@@ -1251,3 +1251,30 @@ Para dúvidas, sugestões ou reportar problemas:
 - **Pull Requests:** Contribuições são bem-vindas!
 
 ---
+
+## Roadmap - Próximas Funcionalidades
+
+### Fase 3 - Funcionalidades Avançadas (Planejado)
+- [ ] Sistema de agendamento de serviços
+- [ ] Histórico completo de serviços por veículo
+- [ ] Relatórios e estatísticas (gráficos)
+- [ ] Notificações por email
+- [ ] Sistema de orçamento antes da aprovação
+- [ ] Controle de estoque de peças
+- [ ] Gestão financeira (receitas e despesas)
+- [ ] App mobile (React Native)
+
+### Melhorias Técnicas (Planejado)
+- [ ] Testes E2E com Cypress
+- [ ] CI/CD com GitHub Actions
+- [ ] Docker e Docker Compose
+- [ ] Deploy em produção (Heroku/AWS)
+- [ ] Banco de dados PostgreSQL para produção
+- [ ] Autenticação com OAuth (Google, Facebook)
+- [ ] API GraphQL além do REST
+
+---
+
+**Versão do Sistema:** 1.0.0  
+**Última Atualização da Documentação:** 2024-10-13  
+**Desenvolvido para:** Oficina Mecânica Comunitária
