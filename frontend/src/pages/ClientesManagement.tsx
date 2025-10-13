@@ -63,6 +63,7 @@ const ClientesManagement: React.FC = () => {
 
   useEffect(() => {
     fetchClientes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchClientes = async () => {

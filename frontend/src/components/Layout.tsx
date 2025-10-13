@@ -26,7 +26,6 @@ import {
 import { HamburgerIcon } from '@chakra-ui/icons';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { getFeatureFlags } from '../utils/permissions';
 import RoleBasedRender from './RoleBasedRender';
 import { UserRole } from '../types';
 
@@ -41,8 +40,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   
   const bg = useColorModeValue('white', 'gray.800');
   const borderColor = useColorModeValue('gray.200', 'gray.700');
-  
-  const featureFlags = getFeatureFlags(user);
 
   const handleLogout = () => {
     logout();
@@ -83,6 +80,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       requireAuth: true,
       roles: [UserRole.MODERATOR, UserRole.ADMIN]
     },
+    { 
+      label: 'Ordens de Serviço', 
+      path: '/ordens', 
+      requireAuth: true,
+      roles: [UserRole.MODERATOR, UserRole.ADMIN]
+    },
     // Gerente (ADMIN) - Monitoring tools
     { 
       label: 'Monitoramento', 
@@ -107,9 +110,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const NavLinks = ({ isMobile = false }) => (
     <>
       {navItems.map((item) => {
-        // Don't show if explicitly hidden
-        if (item.show === false) return null;
-        
         // Show public items or authenticated items based on auth status
         if (item.public || (item.requireAuth && isAuthenticated)) {
           return (

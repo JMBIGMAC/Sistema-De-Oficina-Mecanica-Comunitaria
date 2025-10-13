@@ -22,7 +22,8 @@ import {
   FaUsers, 
   FaShieldAlt, 
   FaClock, 
-  FaHandshake 
+  FaHandshake,
+  FaCode
 } from 'react-icons/fa';
 import { useAuth } from '../hooks/useAuth';
 import RoleBasedRender from '../components/RoleBasedRender';
@@ -242,7 +243,7 @@ const About: React.FC = () => {
           <Container maxW="container.xl">
             <VStack spacing={8}>
               <Heading size="xl" textAlign="center">
-                Your Available Features
+                Recursos Disponíveis para Você
               </Heading>
               
               <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6} w="full">
@@ -251,9 +252,9 @@ const About: React.FC = () => {
                     <CardBody>
                       <VStack spacing={3}>
                         <Icon as={FaUsers as any} boxSize={8} color="brand.500" />
-                        <Heading size="md">User Dashboard</Heading>
+                        <Heading size="md">Painel de Usuário</Heading>
                         <Text textAlign="center" color={textColor}>
-                          Access your personal dashboard and profile settings.
+                          Acesse seu painel pessoal e configurações de perfil.
                         </Text>
                       </VStack>
                     </CardBody>
@@ -264,10 +265,10 @@ const About: React.FC = () => {
                   <Card bg={cardBg} shadow="md">
                     <CardBody>
                       <VStack spacing={3}>
-                        <Icon as={FaShieldAlt as any} boxSize={8} color="secondary.500" />
-                        <Heading size="md">Moderation Tools</Heading>
+                        <Icon as={FaWrench as any} boxSize={8} color="secondary.500" />
+                        <Heading size="md">Ferramentas de Mecânico</Heading>
                         <Text textAlign="center" color={textColor}>
-                          Moderate content and manage community interactions.
+                          Gerencie clientes, veículos, serviços e ordens de trabalho.
                         </Text>
                       </VStack>
                     </CardBody>
@@ -279,9 +280,9 @@ const About: React.FC = () => {
                     <CardBody>
                       <VStack spacing={3}>
                         <Icon as={FaCode as any} boxSize={8} color="accent.500" />
-                        <Heading size="md">Admin Panel</Heading>
+                        <Heading size="md">Painel de Administração</Heading>
                         <Text textAlign="center" color={textColor}>
-                          Full system administration and user management.
+                          Administração completa do sistema e gerenciamento de usuários.
                         </Text>
                       </VStack>
                     </CardBody>

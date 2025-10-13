@@ -63,6 +63,7 @@ const ServicosManagement: React.FC = () => {
 
   useEffect(() => {
     fetchServicos();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchServicos = async () => {
@@ -107,7 +108,7 @@ const ServicosManagement: React.FC = () => {
     setSelectedServico(servico);
     setFormData({
       descricao: servico.descricao,
-      preco_padrao: servico.preco_padrao.toString(),
+      preco_padrao: String(servico.preco_padrao),
     });
     onOpen();
   };
@@ -239,7 +240,7 @@ const ServicosManagement: React.FC = () => {
                   <Tr key={servico.id}>
                     <Td>{servico.descricao}</Td>
                     <Td isNumeric fontWeight="bold" color="green.600">
-                      {formatCurrency(servico.preco_padrao)}
+                      {formatCurrency(parseFloat(String(servico.preco_padrao)))}
                     </Td>
                     <Td>
                       <HStack spacing={2}>

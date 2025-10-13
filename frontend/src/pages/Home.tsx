@@ -49,24 +49,25 @@ const Home: React.FC = () => {
 
   if (!user) return null;
 
-  const sidebarItems = [
-    {
-      icon: FaHome,
-      label: 'Dashboard',
-      path: '/dashboard',
-      roles: [UserRole.USER, UserRole.MODERATOR, UserRole.ADMIN]
-    },
-    {
-      icon: FaUser,
-      label: 'Profile',
-      path: '/profile',
-    },
-    {
-      icon: FaCog,
-      label: 'Settings',
-      path: '/settings',
-    },
-  ];
+  // Sidebar items - currently unused but kept for future navigation
+  // const sidebarItems = [
+  //   {
+  //     icon: FaHome,
+  //     label: 'Dashboard',
+  //     path: '/dashboard',
+  //     roles: [UserRole.USER, UserRole.MODERATOR, UserRole.ADMIN]
+  //   },
+  //   {
+  //     icon: FaUser,
+  //     label: 'Profile',
+  //     path: '/profile',
+  //   },
+  //   {
+  //     icon: FaCog,
+  //     label: 'Settings',
+  //     path: '/settings',
+  //   },
+  // ];
 
   // Client/User Home Content
   const ClientHomeContent = () => (
