@@ -45,72 +45,77 @@ templateV2/
 - **Operações permitidas:** Inserir, Consultar/Listar, Alterar, Excluir.
 - **Regras:** Não é permitido excluir um serviço vinculado a ordens de serviço (a ser implementado).
 
+
 ### Diagrama Entidade-Relacionamento (DER)
 
 ```mermaid
 erDiagram
+    CLIENTE ||--o{ VEICULO : "possui"
     CLIENTE {
-        int id PK
-        string nome
-        string cpf_cnpj UNIQUE
-        string telefone
-        string email
-        string endereco
-        datetime created_at
-        datetime updated_at
+        id PK
+        nome
+        cpf_cnpj UNIQUE
+        telefone
+        email
+        endereco
+        created_at
+        updated_at
     }
     VEICULO {
-        string placa PK
-        int cliente_id FK
-        string marca
-        string modelo
-        int ano
-        string cor
-        int quilometragem
-        string chassi UNIQUE
-        string tipo_combustivel
-        datetime created_at
-        datetime updated_at
+        placa PK
+        cliente_id FK
+        marca
+        modelo
+        ano
+        cor
+        quilometragem
+        chassi UNIQUE
+        tipo_combustivel
+        created_at
+        updated_at
     }
     SERVICO {
-        int id PK
-        string descricao UNIQUE
-        decimal preco_padrao
-        datetime created_at
-        datetime updated_at
+        id PK
+        descricao UNIQUE
+        preco_padrao
+        created_at
+        updated_at
     }
-    CLIENTE ||--o{ VEICULO : "possui"
 ```
 
-- **Cardinalidade:** Um cliente pode ter vários veículos; cada veículo pertence a um cliente.
-- **Chaves:** Cliente (id), Veículo (placa), Serviço (id).
+**Cardinalidade:** Um cliente pode ter vários veículos; cada veículo pertence a um cliente.
+**Chaves:** Cliente (id), Veículo (placa), Serviço (id).
+
 
 ## Fase 2: Desenvolvimento da Aplicação
 
-### Interface de Autenticação e Navegação
+### 1. Interface de Autenticação e Navegação
 - Tela de Login simples (usuário/senha fixos no código).
 - Tela Principal exibida após login, com menu para acesso às funcionalidades.
 
-### Telas de Gerenciamento (CRUD)
+### 2. Telas de Gerenciamento (CRUD)
 - **Clientes:** Inserir, Editar, Excluir, Listar/Consultar.
 - **Veículos:** Inserir, Editar, Excluir, Listar/Consultar.
 - **Serviços:** Inserir, Editar, Excluir, Listar/Consultar.
 
-### Validação de Dados
+### 3. Validação de Dados
 - Todos os campos obrigatórios validados.
 - Formatos de dados (ex: email, CPF/CNPJ, chassi) verificados.
 - Usuário notificado em caso de erro de preenchimento.
+
 
 ## Critérios de Entrega
 
 - **Documentação:** Este README + DER em mermaid.
 - **Aplicação Funcional:** Código-fonte com todas as telas e funcionalidades CRUD implementadas e operacionais.
 
+
 ## Tecnologias Utilizadas
 
 - **Backend:** Django 5.2.7 + Django REST Framework + SQLite
 - **Frontend:** React 18 + TypeScript + Chakra UI
 - **Banco de Dados:** Modelagem via ORM Django, migrations versionadas
+
 
 ## Referências de Código
 
