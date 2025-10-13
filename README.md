@@ -771,6 +771,7 @@ Sistema-De-Oficina-Mecanica-Comunitaria/
 ### 1. Clonar o Repositório
 
 ```bash
+# Clone o repositório
 git clone https://github.com/JMBIGMAC/Sistema-De-Oficina-Mecanica-Comunitaria.git
 cd Sistema-De-Oficina-Mecanica-Comunitaria
 ```
@@ -1247,7 +1248,7 @@ Para dúvidas, sugestões ou reportar problemas:
 
 - **Issues:** Abra uma issue no GitHub
 - **Documentação:** Consulte `DER_DOCUMENTATION.md` para detalhes técnicos
-- **Email:** [contato do projeto]
+- **Pull Requests:** Contribuições são bem-vindas!
 
 ---
 
@@ -1275,5 +1276,5 @@ Para dúvidas, sugestões ou reportar problemas:
 ---
 
 **Versão do Sistema:** 1.0.0  
-**Última Atualização:** 2025-10-13  
+**Última Atualização da Documentação:** 2024-10-13  
 **Desenvolvido para:** Oficina Mecânica Comunitária
