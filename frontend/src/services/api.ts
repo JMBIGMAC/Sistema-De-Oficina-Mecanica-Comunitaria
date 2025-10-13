@@ -710,4 +710,5 @@ const apiExports = {
   workshopApi,
 };
 
+export { workshopApi };
 export default apiExports;
