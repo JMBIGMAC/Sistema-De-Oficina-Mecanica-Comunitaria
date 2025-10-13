@@ -1,8 +1,8 @@
-// User role types (matching backend ACL system)
+// User role types for Mechanical Workshop System
 export enum UserRole {
-  ADMIN = 'dev',        // Desenvolvedor (Dev) - Full access
-  MODERATOR = 'owner',  // Dono/Dona (Owner) - Business owner access
-  USER = 'client',      // Cliente (Client) - Basic client access
+  ADMIN = 'dev',        // Gerente/Administrador (Admin) - Full system monitoring
+  MODERATOR = 'owner',  // Mecânico/Trabalhador (Worker) - Workshop operations
+  USER = 'client',      // Cliente (Client) - Workshop customer
   GUEST = 'guest',      // Guest - Unauthenticated user
 }
 
