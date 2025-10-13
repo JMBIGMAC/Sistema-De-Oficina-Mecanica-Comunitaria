@@ -27,6 +27,9 @@ import AboutEdit from './pages/AboutEdit';
 import PaymentTest from './pages/PaymentTest';
 import Payment from './pages/Payment';
 import ControlUsers from './pages/ControlUsers';
+import ClientesManagement from './pages/ClientesManagement';
+import VeiculosManagement from './pages/VeiculosManagement';
+import ServicosManagement from './pages/ServicosManagement';
 import { UserRole } from './types';
 
 function App() {
@@ -304,6 +307,34 @@ function App() {
                 element={
                   <ProtectedRoute requiredRole={UserRole.USER}>
                     <Messages />
+                  </ProtectedRoute>
+                } 
+              />
+              
+              {/* Workshop Management Routes */}
+              <Route 
+                path="/clientes" 
+                element={
+                  <ProtectedRoute requiredRole={UserRole.USER}>
+                    <ClientesManagement />
+                  </ProtectedRoute>
+                } 
+              />
+              
+              <Route 
+                path="/veiculos" 
+                element={
+                  <ProtectedRoute requiredRole={UserRole.USER}>
+                    <VeiculosManagement />
+                  </ProtectedRoute>
+                } 
+              />
+              
+              <Route 
+                path="/servicos" 
+                element={
+                  <ProtectedRoute requiredRole={UserRole.USER}>
+                    <ServicosManagement />
                   </ProtectedRoute>
                 } 
               />

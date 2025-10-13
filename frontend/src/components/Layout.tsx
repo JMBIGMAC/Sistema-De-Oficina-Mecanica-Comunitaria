@@ -64,6 +64,24 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       roles: [UserRole.USER, UserRole.MODERATOR, UserRole.ADMIN]
     },
     { 
+      label: 'Clientes', 
+      path: '/clientes', 
+      requireAuth: true,
+      roles: [UserRole.USER, UserRole.MODERATOR, UserRole.ADMIN]
+    },
+    { 
+      label: 'Veículos', 
+      path: '/veiculos', 
+      requireAuth: true,
+      roles: [UserRole.USER, UserRole.MODERATOR, UserRole.ADMIN]
+    },
+    { 
+      label: 'Serviços', 
+      path: '/servicos', 
+      requireAuth: true,
+      roles: [UserRole.USER, UserRole.MODERATOR, UserRole.ADMIN]
+    },
+    { 
       label: 'Payment', 
       path: '/home/payment', 
       requireAuth: true,

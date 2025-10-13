@@ -113,3 +113,43 @@ export interface PermissionMatrix {
     };
   };
 }
+
+// Workshop System Types
+
+export interface Cliente {
+  id: number;
+  nome: string;
+  cpf_cnpj: string;
+  telefone: string;
+  email: string;
+  endereco: string;
+  created_at: string;
+  updated_at: string;
+  veiculos_count?: number;
+}
+
+export type TipoCombustivel = 'gasolina' | 'alcool' | 'flex' | 'diesel' | 'eletrico' | 'hibrido';
+
+export interface Veiculo {
+  placa: string;
+  cliente: number;
+  cliente_id?: number;
+  cliente_nome?: string;
+  marca: string;
+  modelo: string;
+  ano: number;
+  cor: string;
+  quilometragem: number;
+  chassi: string;
+  tipo_combustivel: TipoCombustivel;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Servico {
+  id: number;
+  descricao: string;
+  preco_padrao: number;
+  created_at: string;
+  updated_at: string;
+}
