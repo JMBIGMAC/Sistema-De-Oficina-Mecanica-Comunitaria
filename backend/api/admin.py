@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import UserProfile, Message, MessageReply, MessageSettings
+from .models import UserProfile, Message, MessageReply, MessageSettings, Cliente, Veiculo, Servico
 
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
@@ -33,3 +33,28 @@ class MessageReplyAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         return qs.select_related('message', 'from_user')
+
+@admin.register(Cliente)
+class ClienteAdmin(admin.ModelAdmin):
+    list_display = ['nome', 'cpf_cnpj', 'telefone', 'email', 'created_at']
+    list_filter = ['created_at', 'updated_at']
+    search_fields = ['nome', 'cpf_cnpj', 'email', 'telefone']
+    readonly_fields = ['created_at', 'updated_at']
+
+@admin.register(Veiculo)
+class VeiculoAdmin(admin.ModelAdmin):
+    list_display = ['placa', 'marca', 'modelo', 'ano', 'cliente', 'tipo_combustivel']
+    list_filter = ['marca', 'tipo_combustivel', 'created_at']
+    search_fields = ['placa', 'marca', 'modelo', 'chassi', 'cliente__nome']
+    readonly_fields = ['created_at', 'updated_at']
+    
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.select_related('cliente')
+
+@admin.register(Servico)
+class ServicoAdmin(admin.ModelAdmin):
+    list_display = ['descricao', 'preco_padrao', 'created_at']
+    list_filter = ['created_at', 'updated_at']
+    search_fields = ['descricao']
+    readonly_fields = ['created_at', 'updated_at']

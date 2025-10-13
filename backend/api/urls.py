@@ -18,4 +18,11 @@ urlpatterns = [
     path('acl/pages/', views.list_pages, name='list_pages'),
     path('acl/role-permissions/', views.role_permissions, name='role_permissions'),
     path('acl/check-permission/', views.check_page_permission, name='check_page_permission'),
+    # Workshop endpoints
+    path('clientes/', views.clientes_list, name='clientes_list'),
+    path('clientes/<int:pk>/', views.clientes_detail, name='clientes_detail'),
+    path('veiculos/', views.veiculos_list, name='veiculos_list'),
+    path('veiculos/<str:placa>/', views.veiculos_detail, name='veiculos_detail'),
+    path('servicos/', views.servicos_list, name='servicos_list'),
+    path('servicos/<int:pk>/', views.servicos_detail, name='servicos_detail'),
 ]

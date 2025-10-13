@@ -393,10 +393,322 @@ export const aclApi = {
   },
 };
 
+// Workshop API
+const workshopApi = {
+  // Clientes
+  async getClientes(search?: string) {
+    try {
+      const url = search 
+        ? `${API_BASE_URL}/clientes/?search=${encodeURIComponent(search)}`
+        : `${API_BASE_URL}/clientes/`;
+      
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: getAuthHeaders(),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        return { success: false, error: errorData.error || 'Failed to fetch clientes' };
+      }
+
+      const data = await response.json();
+      return { success: true, data: data.clientes };
+    } catch (error) {
+      return { success: false, error: 'Network error' };
+    }
+  },
+
+  async getCliente(id: number) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/clientes/${id}/`, {
+        method: 'GET',
+        headers: getAuthHeaders(),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        return { success: false, error: errorData.error || 'Failed to fetch cliente' };
+      }
+
+      const data = await response.json();
+      return { success: true, data };
+    } catch (error) {
+      return { success: false, error: 'Network error' };
+    }
+  },
+
+  async createCliente(clienteData: any) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/clientes/`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(clienteData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        return { success: false, error: errorData };
+      }
+
+      const data = await response.json();
+      return { success: true, data };
+    } catch (error) {
+      return { success: false, error: 'Network error' };
+    }
+  },
+
+  async updateCliente(id: number, clienteData: any) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/clientes/${id}/`, {
+        method: 'PUT',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(clienteData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        return { success: false, error: errorData };
+      }
+
+      const data = await response.json();
+      return { success: true, data };
+    } catch (error) {
+      return { success: false, error: 'Network error' };
+    }
+  },
+
+  async deleteCliente(id: number) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/clientes/${id}/`, {
+        method: 'DELETE',
+        headers: getAuthHeaders(),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        return { success: false, error: errorData.error || 'Failed to delete cliente' };
+      }
+
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: 'Network error' };
+    }
+  },
+
+  // Veiculos
+  async getVeiculos(search?: string, clienteId?: number) {
+    try {
+      let url = `${API_BASE_URL}/veiculos/`;
+      const params = new URLSearchParams();
+      
+      if (search) params.append('search', search);
+      if (clienteId) params.append('cliente_id', clienteId.toString());
+      
+      if (params.toString()) url += `?${params.toString()}`;
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: getAuthHeaders(),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        return { success: false, error: errorData.error || 'Failed to fetch veiculos' };
+      }
+
+      const data = await response.json();
+      return { success: true, data: data.veiculos };
+    } catch (error) {
+      return { success: false, error: 'Network error' };
+    }
+  },
+
+  async getVeiculo(placa: string) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/veiculos/${placa}/`, {
+        method: 'GET',
+        headers: getAuthHeaders(),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        return { success: false, error: errorData.error || 'Failed to fetch veiculo' };
+      }
+
+      const data = await response.json();
+      return { success: true, data };
+    } catch (error) {
+      return { success: false, error: 'Network error' };
+    }
+  },
+
+  async createVeiculo(veiculoData: any) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/veiculos/`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(veiculoData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        return { success: false, error: errorData };
+      }
+
+      const data = await response.json();
+      return { success: true, data };
+    } catch (error) {
+      return { success: false, error: 'Network error' };
+    }
+  },
+
+  async updateVeiculo(placa: string, veiculoData: any) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/veiculos/${placa}/`, {
+        method: 'PUT',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(veiculoData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        return { success: false, error: errorData };
+      }
+
+      const data = await response.json();
+      return { success: true, data };
+    } catch (error) {
+      return { success: false, error: 'Network error' };
+    }
+  },
+
+  async deleteVeiculo(placa: string) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/veiculos/${placa}/`, {
+        method: 'DELETE',
+        headers: getAuthHeaders(),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        return { success: false, error: errorData.error || 'Failed to delete veiculo' };
+      }
+
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: 'Network error' };
+    }
+  },
+
+  // Servicos
+  async getServicos(search?: string) {
+    try {
+      const url = search 
+        ? `${API_BASE_URL}/servicos/?search=${encodeURIComponent(search)}`
+        : `${API_BASE_URL}/servicos/`;
+      
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: getAuthHeaders(),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        return { success: false, error: errorData.error || 'Failed to fetch servicos' };
+      }
+
+      const data = await response.json();
+      return { success: true, data: data.servicos };
+    } catch (error) {
+      return { success: false, error: 'Network error' };
+    }
+  },
+
+  async getServico(id: number) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/servicos/${id}/`, {
+        method: 'GET',
+        headers: getAuthHeaders(),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        return { success: false, error: errorData.error || 'Failed to fetch servico' };
+      }
+
+      const data = await response.json();
+      return { success: true, data };
+    } catch (error) {
+      return { success: false, error: 'Network error' };
+    }
+  },
+
+  async createServico(servicoData: any) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/servicos/`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(servicoData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        return { success: false, error: errorData };
+      }
+
+      const data = await response.json();
+      return { success: true, data };
+    } catch (error) {
+      return { success: false, error: 'Network error' };
+    }
+  },
+
+  async updateServico(id: number, servicoData: any) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/servicos/${id}/`, {
+        method: 'PUT',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(servicoData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        return { success: false, error: errorData };
+      }
+
+      const data = await response.json();
+      return { success: true, data };
+    } catch (error) {
+      return { success: false, error: 'Network error' };
+    }
+  },
+
+  async deleteServico(id: number) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/servicos/${id}/`, {
+        method: 'DELETE',
+        headers: getAuthHeaders(),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        return { success: false, error: errorData.error || 'Failed to delete servico' };
+      }
+
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: 'Network error' };
+    }
+  },
+};
+
 const apiExports = {
   messagesApi,
   profileApi,
   aclApi,
+  workshopApi,
 };
 
+export { workshopApi };
 export default apiExports;
