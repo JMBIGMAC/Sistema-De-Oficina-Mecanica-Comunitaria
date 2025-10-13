@@ -45,6 +45,7 @@ import {
 import { AddIcon, EditIcon, DeleteIcon, SearchIcon } from '@chakra-ui/icons';
 import { workshopApi } from '../services/api';
 import { Servico } from '../types';
+import { formatCurrency } from '../utils/priceUtils';
 
 const ServicosManagement: React.FC = () => {
   const [servicos, setServicos] = useState<Servico[]>([]);
@@ -63,6 +64,7 @@ const ServicosManagement: React.FC = () => {
 
   useEffect(() => {
     fetchServicos();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchServicos = async () => {
@@ -107,7 +109,7 @@ const ServicosManagement: React.FC = () => {
     setSelectedServico(servico);
     setFormData({
       descricao: servico.descricao,
-      preco_padrao: servico.preco_padrao.toString(),
+      preco_padrao: String(servico.preco_padrao),
     });
     onOpen();
   };
@@ -181,13 +183,6 @@ const ServicosManagement: React.FC = () => {
         duration: 5000,
       });
     }
-  };
-
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-    }).format(value);
   };
 
   return (

@@ -68,6 +68,7 @@ const VeiculosManagement: React.FC = () => {
   useEffect(() => {
     fetchVeiculos();
     fetchClientes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchVeiculos = async () => {

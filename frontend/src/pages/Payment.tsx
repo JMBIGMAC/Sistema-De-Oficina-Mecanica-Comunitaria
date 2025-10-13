@@ -14,7 +14,6 @@ import {
   SimpleGrid,
   Badge,
   Icon,
-  Divider,
   useColorModeValue,
   useToast,
   Select,
@@ -24,13 +23,12 @@ import {
   Spinner,
   Center,
 } from '@chakra-ui/react';
-import { FaCreditCard, FaLock, FaCheckCircle, FaWrench } from 'react-icons/fa';
+import { FaLock, FaCheckCircle, FaWrench } from 'react-icons/fa';
 import { workshopApi } from '../services/api';
 import { Servico, Veiculo, Cliente } from '../types';
-import { useAuth } from '../hooks/useAuth';
+import { formatPrice } from '../utils/priceUtils';
 
 const Payment: React.FC = () => {
-  const { user } = useAuth();
   const bgColor = useColorModeValue('gray.50', 'gray.900');
   const cardBg = useColorModeValue('white', 'gray.800');
   const borderColor = useColorModeValue('gray.200', 'gray.700');
@@ -84,7 +82,10 @@ const Payment: React.FC = () => {
     // Auto-fill price from selected service
     const servico = servicos.find(s => s.id === parseInt(servicoId));
     if (servico) {
-      setFormData(prev => ({ ...prev, preco_final: servico.preco_padrao.toString() }));
+      const preco = typeof servico.preco_padrao === 'string' 
+        ? servico.preco_padrao 
+        : servico.preco_padrao.toString();
+      setFormData(prev => ({ ...prev, preco_final: preco }));
     }
   };
 
@@ -193,7 +194,7 @@ const Payment: React.FC = () => {
                             </Text>
                             <HStack justify="center" mt={2}>
                               <Text fontSize="2xl" fontWeight="bold">
-                                R$ {servico.preco_padrao.toFixed(2)}
+                                R$ {formatPrice(servico.preco_padrao)}
                               </Text>
                             </HStack>
                           </Box>
@@ -256,7 +257,7 @@ const Payment: React.FC = () => {
                         >
                           {servicos.map((servico) => (
                             <option key={servico.id} value={servico.id}>
-                              {servico.descricao} - R$ {servico.preco_padrao.toFixed(2)}
+                              {servico.descricao} - R$ {formatPrice(servico.preco_padrao)}
                             </option>
                           ))}
                         </Select>
@@ -285,7 +286,7 @@ const Payment: React.FC = () => {
                             <NumberInputField placeholder="0.00" />
                           </NumberInput>
                           <Text fontSize="sm" color="gray.500" mt={1}>
-                            Preço padrão: R$ {selectedServico.preco_padrao.toFixed(2)}
+                            Preço padrão: R$ {formatPrice(selectedServico.preco_padrao)}
                           </Text>
                         </FormControl>
                       )}

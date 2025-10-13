@@ -9,27 +9,19 @@ import About from './pages/About';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
-import Dashboard from './pages/Dashboard';
 import Analytics from './pages/Analytics';
 import Profile from './pages/Profile';
-import Messages from './pages/Messages';
 import ContactUs from './pages/ContactUs';
 import UserProblems from './pages/UserProblems';
 import RoleManagement from './pages/RoleManagement';
 import NotFound from './pages/NotFound';
-import TechnicalError from './pages/TechnicalError';
-import ProfileAll from './pages/ProfileAll';
-import AnalyticsUsers from './pages/AnalyticsUsers';
-import AnalyticsGraphics from './pages/AnalyticsGraphics';
-import AnalyticsAllTime from './pages/AnalyticsAllTime';
-import AnalyticsTrends from './pages/AnalyticsTrends';
-import AboutEdit from './pages/AboutEdit';
 import PaymentTest from './pages/PaymentTest';
 import Payment from './pages/Payment';
 import ControlUsers from './pages/ControlUsers';
 import ClientesManagement from './pages/ClientesManagement';
 import VeiculosManagement from './pages/VeiculosManagement';
 import ServicosManagement from './pages/ServicosManagement';
+import OrdensServicoManagement from './pages/OrdensServicoManagement';
 import { UserRole } from './types';
 
 function App() {
@@ -104,6 +96,15 @@ function App() {
                 element={
                   <ProtectedRoute requiredRole={UserRole.MODERATOR}>
                     <ServicosManagement />
+                  </ProtectedRoute>
+                } 
+              />
+              
+              <Route 
+                path="/ordens" 
+                element={
+                  <ProtectedRoute requiredRole={UserRole.MODERATOR}>
+                    <OrdensServicoManagement />
                   </ProtectedRoute>
                 } 
               />

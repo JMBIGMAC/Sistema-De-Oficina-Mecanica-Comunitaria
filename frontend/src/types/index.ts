@@ -149,7 +149,7 @@ export interface Veiculo {
 export interface Servico {
   id: number;
   descricao: string;
-  preco_padrao: number;
+  preco_padrao: number | string; // Can be number or string from API
   created_at: string;
   updated_at: string;
 }
