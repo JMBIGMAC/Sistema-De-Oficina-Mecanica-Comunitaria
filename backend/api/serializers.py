@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Cliente, Veiculo, Servico
+from .models import Cliente, Veiculo, Servico, OrdemServico
 
 
 class ClienteSerializer(serializers.ModelSerializer):
@@ -69,3 +69,41 @@ class ServicoSerializer(serializers.ModelSerializer):
         if value <= 0:
             raise serializers.ValidationError("Preço deve ser maior que zero")
         return value
+
+
+class OrdemServicoSerializer(serializers.ModelSerializer):
+    """Serializer for OrdemServico model"""
+    cliente_nome = serializers.CharField(source='cliente.nome', read_only=True)
+    veiculo_info = serializers.SerializerMethodField()
+    servico_descricao = serializers.CharField(source='servico.descricao', read_only=True)
+    mecanico_nome = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = OrdemServico
+        fields = [
+            'id', 'cliente', 'cliente_nome', 'veiculo', 'veiculo_info', 
+            'servico', 'servico_descricao', 'descricao_problema', 'observacoes',
+            'preco_final', 'status', 'status_pagamento',
+            'data_solicitacao', 'data_aprovacao', 'data_conclusao',
+            'mecanico_responsavel', 'mecanico_nome',
+            'created_at', 'updated_at'
+        ]
+        read_only_fields = ['id', 'data_solicitacao', 'created_at', 'updated_at']
+    
+    def get_veiculo_info(self, obj):
+        return f"{obj.veiculo.placa} - {obj.veiculo.marca} {obj.veiculo.modelo}"
+    
+    def get_mecanico_nome(self, obj):
+        if obj.mecanico_responsavel:
+            return f"{obj.mecanico_responsavel.first_name} {obj.mecanico_responsavel.last_name}"
+        return None
+    
+    def validate(self, data):
+        """Validate that cliente owns the veiculo"""
+        if 'cliente' in data and 'veiculo' in data:
+            if data['veiculo'].cliente != data['cliente']:
+                raise serializers.ValidationError({
+                    'veiculo': 'O veículo não pertence ao cliente selecionado'
+                })
+        return data
+

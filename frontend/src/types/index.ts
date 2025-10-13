@@ -1,8 +1,8 @@
-// User role types (matching backend ACL system)
+// User role types for Mechanical Workshop System
 export enum UserRole {
-  ADMIN = 'dev',        // Desenvolvedor (Dev) - Full access
-  MODERATOR = 'owner',  // Dono/Dona (Owner) - Business owner access
-  USER = 'client',      // Cliente (Client) - Basic client access
+  ADMIN = 'dev',        // Gerente/Administrador (Admin) - Full system monitoring
+  MODERATOR = 'owner',  // Mecânico/Trabalhador (Worker) - Workshop operations
+  USER = 'client',      // Cliente (Client) - Workshop customer
   GUEST = 'guest',      // Guest - Unauthenticated user
 }
 
@@ -150,6 +150,28 @@ export interface Servico {
   id: number;
   descricao: string;
   preco_padrao: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface OrdemServico {
+  id: number;
+  cliente: number;
+  cliente_nome?: string;
+  veiculo: string; // placa
+  veiculo_info?: string;
+  servico: number;
+  servico_descricao?: string;
+  descricao_problema: string;
+  observacoes: string;
+  preco_final: number;
+  status: 'pendente' | 'aprovado' | 'em_andamento' | 'concluido' | 'cancelado';
+  status_pagamento: 'pendente' | 'parcial' | 'pago';
+  data_solicitacao: string;
+  data_aprovacao?: string;
+  data_conclusao?: string;
+  mecanico_responsavel?: number;
+  mecanico_nome?: string;
   created_at: string;
   updated_at: string;
 }

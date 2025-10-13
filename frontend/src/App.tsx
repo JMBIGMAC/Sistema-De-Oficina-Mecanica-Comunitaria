@@ -44,20 +44,12 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
               
-              {/* Client (User) Routes */}
+              {/* All Authenticated Users */}
               <Route 
                 path="/home" 
                 element={
                   <ProtectedRoute requiredRole={UserRole.USER}>
                     <Home />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/dashboard" 
-                element={
-                  <ProtectedRoute requiredRole={UserRole.USER}>
-                    <Dashboard />
                   </ProtectedRoute>
                 } 
               />
@@ -69,6 +61,8 @@ function App() {
                   </ProtectedRoute>
                 } 
               />
+              
+              {/* Cliente (USER) Routes - Can only contact and hire services */}
               <Route 
                 path="/contactUs" 
                 element={
@@ -86,236 +80,11 @@ function App() {
                 } 
               />
               
-              {/* Owner (Moderator) Routes */}
-              <Route 
-                path="/profile/all" 
-                element={
-                  <ProtectedRoute 
-                    requiredRole={UserRole.MODERATOR}
-                    fallback={
-                      <div style={{ padding: '2rem', textAlign: 'center' }}>
-                        <h2>All Profiles</h2>
-                        <p>This feature requires owner access or higher.</p>
-                      </div>
-                    }
-                  >
-                    <ProfileAll />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/analytics" 
-                element={
-                  <ProtectedRoute 
-                    requiredRole={UserRole.MODERATOR}
-                    fallback={
-                      <div style={{ padding: '2rem', textAlign: 'center' }}>
-                        <h2>Analytics Dashboard</h2>
-                        <p>This feature requires owner access or higher.</p>
-                      </div>
-                    }
-                  >
-                    <Analytics />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/analytics/users" 
-                element={
-                  <ProtectedRoute 
-                    requiredRole={UserRole.MODERATOR}
-                    fallback={
-                      <div style={{ padding: '2rem', textAlign: 'center' }}>
-                        <h2>User Analytics</h2>
-                        <p>This feature requires owner access or higher.</p>
-                      </div>
-                    }
-                  >
-                    <AnalyticsUsers />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/analytics/graphics" 
-                element={
-                  <ProtectedRoute 
-                    requiredRole={UserRole.MODERATOR}
-                    fallback={
-                      <div style={{ padding: '2rem', textAlign: 'center' }}>
-                        <h2>Graphics & Charts</h2>
-                        <p>This feature requires owner access or higher.</p>
-                      </div>
-                    }
-                  >
-                    <AnalyticsGraphics />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/analytics/all-time" 
-                element={
-                  <ProtectedRoute 
-                    requiredRole={UserRole.MODERATOR}
-                    fallback={
-                      <div style={{ padding: '2rem', textAlign: 'center' }}>
-                        <h2>All Time View</h2>
-                        <p>This feature requires owner access or higher.</p>
-                      </div>
-                    }
-                  >
-                    <AnalyticsAllTime />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/analytics/trends" 
-                element={
-                  <ProtectedRoute 
-                    requiredRole={UserRole.MODERATOR}
-                    fallback={
-                      <div style={{ padding: '2rem', textAlign: 'center' }}>
-                        <h2>Trends Analysis</h2>
-                        <p>This feature requires owner access or higher.</p>
-                      </div>
-                    }
-                  >
-                    <AnalyticsTrends />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/usersProblems" 
-                element={
-                  <ProtectedRoute 
-                    requiredRole={UserRole.MODERATOR}
-                    fallback={
-                      <div style={{ padding: '2rem', textAlign: 'center' }}>
-                        <h2>User Problems</h2>
-                        <p>This feature requires owner access or higher.</p>
-                      </div>
-                    }
-                  >
-                    <UserProblems />
-                  </ProtectedRoute>
-                } 
-              />
-              
-              {/* Dev (Admin) Routes */}
-              <Route 
-                path="/about/edit" 
-                element={
-                  <ProtectedRoute 
-                    requiredRole={UserRole.ADMIN}
-                    fallback={
-                      <div style={{ padding: '2rem', textAlign: 'center' }}>
-                        <h2>Edit About Page</h2>
-                        <p>This area requires developer access.</p>
-                      </div>
-                    }
-                  >
-                    <AboutEdit />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/home/payment/test" 
-                element={
-                  <ProtectedRoute 
-                    requiredRole={UserRole.ADMIN}
-                    fallback={
-                      <div style={{ padding: '2rem', textAlign: 'center' }}>
-                        <h2>Payment Testing</h2>
-                        <p>This area requires developer access.</p>
-                      </div>
-                    }
-                  >
-                    <PaymentTest />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/control/users" 
-                element={
-                  <ProtectedRoute 
-                    requiredRole={UserRole.ADMIN}
-                    fallback={
-                      <div style={{ padding: '2rem', textAlign: 'center' }}>
-                        <h2>User Monitoring</h2>
-                        <p>This area requires developer access.</p>
-                      </div>
-                    }
-                  >
-                    <ControlUsers />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/organization/roles" 
-                element={
-                  <ProtectedRoute 
-                    requiredRole={UserRole.ADMIN}
-                    fallback={
-                      <div style={{ padding: '2rem', textAlign: 'center' }}>
-                        <h2>Role Management</h2>
-                        <p>This area requires developer access.</p>
-                      </div>
-                    }
-                  >
-                    <RoleManagement />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/error/raw" 
-                element={
-                  <ProtectedRoute 
-                    requiredRole={UserRole.ADMIN}
-                    fallback={
-                      <div style={{ padding: '2rem', textAlign: 'center' }}>
-                        <h2>Technical Error Details</h2>
-                        <p>This area requires developer access.</p>
-                      </div>
-                    }
-                  >
-                    <TechnicalError />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/admin/*" 
-                element={
-                  <ProtectedRoute 
-                    requiredRole={UserRole.ADMIN}
-                    fallback={
-                      <div style={{ padding: '2rem', textAlign: 'center' }}>
-                        <h2>Admin Panel</h2>
-                        <p>This area requires administrator access.</p>
-                      </div>
-                    }
-                  >
-                    <div style={{ padding: '2rem', textAlign: 'center' }}>
-                      <h2>Admin Panel</h2>
-                      <p>Admin content would go here...</p>
-                    </div>
-                  </ProtectedRoute>
-                } 
-              />
-              
-              {/* Messages Route */}
-              <Route 
-                path="/messages" 
-                element={
-                  <ProtectedRoute requiredRole={UserRole.USER}>
-                    <Messages />
-                  </ProtectedRoute>
-                } 
-              />
-              
-              {/* Workshop Management Routes */}
+              {/* Mecânico/Trabalhador (MODERATOR) Routes - Workshop operations */}
               <Route 
                 path="/clientes" 
                 element={
-                  <ProtectedRoute requiredRole={UserRole.USER}>
+                  <ProtectedRoute requiredRole={UserRole.MODERATOR}>
                     <ClientesManagement />
                   </ProtectedRoute>
                 } 
@@ -324,7 +93,7 @@ function App() {
               <Route 
                 path="/veiculos" 
                 element={
-                  <ProtectedRoute requiredRole={UserRole.USER}>
+                  <ProtectedRoute requiredRole={UserRole.MODERATOR}>
                     <VeiculosManagement />
                   </ProtectedRoute>
                 } 
@@ -333,20 +102,50 @@ function App() {
               <Route 
                 path="/servicos" 
                 element={
-                  <ProtectedRoute requiredRole={UserRole.USER}>
+                  <ProtectedRoute requiredRole={UserRole.MODERATOR}>
                     <ServicosManagement />
                   </ProtectedRoute>
                 } 
               />
               
+              {/* Gerente (ADMIN) Routes - Full monitoring and control */}
               <Route 
-                path="/settings" 
+                path="/analytics" 
                 element={
-                  <ProtectedRoute requiredRole={UserRole.USER}>
-                    <div style={{ padding: '2rem', textAlign: 'center' }}>
-                      <h2>Settings</h2>
-                      <p>User settings page coming soon...</p>
-                    </div>
+                  <ProtectedRoute requiredRole={UserRole.ADMIN}>
+                    <Analytics />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/usersProblems" 
+                element={
+                  <ProtectedRoute requiredRole={UserRole.ADMIN}>
+                    <UserProblems />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/control/users" 
+                element={
+                  <ProtectedRoute requiredRole={UserRole.ADMIN}>
+                    <ControlUsers />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/organization/roles" 
+                element={
+                  <ProtectedRoute requiredRole={UserRole.ADMIN}>
+                    <RoleManagement />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/home/payment/test" 
+                element={
+                  <ProtectedRoute requiredRole={UserRole.ADMIN}>
+                    <PaymentTest />
                   </ProtectedRoute>
                 } 
               />

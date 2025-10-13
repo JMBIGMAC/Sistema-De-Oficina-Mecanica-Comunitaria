@@ -25,4 +25,6 @@ urlpatterns = [
     path('veiculos/<str:placa>/', views.veiculos_detail, name='veiculos_detail'),
     path('servicos/', views.servicos_list, name='servicos_list'),
     path('servicos/<int:pk>/', views.servicos_detail, name='servicos_detail'),
+    path('ordens-servico/', views.ordens_servico_list, name='ordens_servico_list'),
+    path('ordens-servico/<int:pk>/', views.ordens_servico_detail, name='ordens_servico_detail'),
 ]

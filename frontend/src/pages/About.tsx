@@ -17,21 +17,19 @@ import {
 } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 import { 
-  FaRocket, 
+  FaCar, 
+  FaWrench, 
   FaUsers, 
   FaShieldAlt, 
-  FaPalette, 
-  FaCode, 
-  FaMobile 
+  FaClock, 
+  FaHandshake 
 } from 'react-icons/fa';
 import { useAuth } from '../hooks/useAuth';
 import RoleBasedRender from '../components/RoleBasedRender';
 import { UserRole } from '../types';
-import { getFeatureFlags } from '../utils/permissions';
 
 const About: React.FC = () => {
   const { user, isAuthenticated } = useAuth();
-  const featureFlags = getFeatureFlags(user);
   
   const gradientBg = useColorModeValue(
     'linear(to-r, brand.500, secondary.500)',
@@ -43,39 +41,39 @@ const About: React.FC = () => {
 
   const features = [
     {
-      icon: FaRocket,
-      title: 'Modern Tech Stack',
-      description: 'Built with React, TypeScript, Chakra UI, and Django for a robust full-stack experience.',
+      icon: FaWrench,
+      title: 'Serviços Especializados',
+      description: 'Equipe qualificada de mecânicos prontos para cuidar do seu veículo com excelência.',
       color: 'brand.500',
     },
     {
       icon: FaUsers,
-      title: 'Role-Based Access',
-      description: 'Sophisticated user role management with granular permissions and feature flags.',
+      title: 'Atendimento Comunitário',
+      description: 'Oficina focada em servir a comunidade com preços justos e transparência total.',
       color: 'secondary.500',
     },
     {
       icon: FaShieldAlt,
-      title: 'Secure Authentication',
-      description: 'Comprehensive authentication system with JWT tokens and secure session management.',
+      title: 'Garantia de Qualidade',
+      description: 'Todos os serviços com garantia, usando peças originais ou de primeira linha.',
       color: 'success.500',
     },
     {
-      icon: FaPalette,
-      title: 'Customizable Theme',
-      description: 'Beautiful, customizable color palette with dark/light mode support.',
+      icon: FaCar,
+      title: 'Gestão de Veículos',
+      description: 'Sistema completo para acompanhar o histórico e manutenção de seus veículos.',
       color: 'accent.500',
     },
     {
-      icon: FaCode,
-      title: 'Developer Friendly',
-      description: 'Clean code architecture with TypeScript, comprehensive testing, and excellent DX.',
+      icon: FaClock,
+      title: 'Agendamento Fácil',
+      description: 'Agende serviços online de forma rápida e prática, sem complicações.',
       color: 'warning.500',
     },
     {
-      icon: FaMobile,
-      title: 'Responsive Design',
-      description: 'Mobile-first design that works beautifully on all devices and screen sizes.',
+      icon: FaHandshake,
+      title: 'Confiança e Transparência',
+      description: 'Orçamentos claros e detalhados antes de qualquer serviço ser realizado.',
       color: 'error.500',
     },
   ];
@@ -97,9 +95,9 @@ const About: React.FC = () => {
               fontWeight="bold"
               lineHeight="shorter"
             >
-              Modern Full-Stack
+              Sistema de Oficina
               <br />
-              Web Application Template
+              Mecânica Comunitária
             </Heading>
             
             <Text
@@ -107,8 +105,8 @@ const About: React.FC = () => {
               maxW="2xl"
               opacity={0.9}
             >
-              A production-ready template with React, TypeScript, Chakra UI, and Django.
-              Features role-based access control, modern UI components, and comprehensive testing.
+              Manutenção e reparos automotivos de qualidade para a comunidade.
+              Atendimento profissional, preços justos e total transparência.
             </Text>
 
             <HStack spacing={4} flexWrap="wrap" justify="center">
@@ -124,7 +122,7 @@ const About: React.FC = () => {
                     _active={{ transform: 'translateY(0)' }}
                     boxShadow="lg"
                   >
-                    Get Started
+                    Cadastre-se
                   </Button>
                   <Button
                     as={RouterLink}
@@ -135,13 +133,13 @@ const About: React.FC = () => {
                     color="white"
                     _hover={{ bg: 'whiteAlpha.200' }}
                   >
-                    Login
+                    Entrar
                   </Button>
                 </>
               ) : (
                 <Button
                   as={RouterLink}
-                  to="/dashboard"
+                  to="/home"
                   size="lg"
                   bg="white"
                   color="brand.500"
@@ -149,7 +147,7 @@ const About: React.FC = () => {
                   _active={{ transform: 'translateY(0)' }}
                   boxShadow="lg"
                 >
-                  Go to Dashboard
+                  Ir para o Sistema
                 </Button>
               )}
             </HStack>
@@ -166,22 +164,17 @@ const About: React.FC = () => {
                 borderColor="whiteAlpha.300"
               >
                 <Text fontSize="lg">
-                  Welcome back, <strong>{user?.firstName}</strong>!
+                  Bem-vindo(a), <strong>{user?.firstName}</strong>!
                 </Text>
                 <HStack spacing={2} justify="center" mt={2}>
-                  <Badge colorScheme="blue" variant="solid">
-                    {user?.role.toUpperCase()}
+                  <Badge 
+                    colorScheme={user?.role === UserRole.ADMIN ? 'purple' : 
+                                user?.role === UserRole.MODERATOR ? 'blue' : 'green'} 
+                    variant="solid"
+                  >
+                    {user?.role === UserRole.ADMIN ? 'GERENTE' :
+                     user?.role === UserRole.MODERATOR ? 'MECÂNICO' : 'CLIENTE'}
                   </Badge>
-                  {featureFlags.showAdminPanel && (
-                    <Badge colorScheme="purple" variant="solid">
-                      ADMIN ACCESS
-                    </Badge>
-                  )}
-                  {featureFlags.canModerateContent && (
-                    <Badge colorScheme="green" variant="solid">
-                      MODERATOR
-                    </Badge>
-                  )}
                 </HStack>
               </Box>
             </RoleBasedRender>
@@ -195,11 +188,11 @@ const About: React.FC = () => {
           <VStack spacing={16}>
             <VStack spacing={4} textAlign="center">
               <Heading size="xl">
-                Everything You Need
+                Nossos Serviços
               </Heading>
               <Text fontSize="lg" color={textColor} maxW="2xl">
-                This template includes all the essential features for building modern web applications
-                with proper authentication, authorization, and user management.
+                Oficina comunitária completa com todos os recursos necessários para 
+                manutenção automotiva profissional e gestão eficiente.
               </Text>
             </VStack>
 

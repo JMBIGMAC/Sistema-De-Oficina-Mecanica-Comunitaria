@@ -50,63 +50,54 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   };
 
   const navItems = [
-    { label: 'About', path: '/', public: true },
+    { label: 'Sobre', path: '/', public: true },
     { 
-      label: 'Home', 
+      label: 'Início', 
       path: '/home', 
       requireAuth: true,
       roles: [UserRole.USER, UserRole.MODERATOR, UserRole.ADMIN]
     },
+    // Cliente (USER) only sees contact/hire services
     { 
-      label: 'Dashboard', 
-      path: '/dashboard', 
+      label: 'Solicitar Serviço', 
+      path: '/contactUs', 
       requireAuth: true,
-      roles: [UserRole.USER, UserRole.MODERATOR, UserRole.ADMIN]
+      roles: [UserRole.USER]
     },
+    // Mecânico (MODERATOR) - Worker tools
     { 
       label: 'Clientes', 
       path: '/clientes', 
       requireAuth: true,
-      roles: [UserRole.USER, UserRole.MODERATOR, UserRole.ADMIN]
+      roles: [UserRole.MODERATOR, UserRole.ADMIN]
     },
     { 
       label: 'Veículos', 
       path: '/veiculos', 
       requireAuth: true,
-      roles: [UserRole.USER, UserRole.MODERATOR, UserRole.ADMIN]
+      roles: [UserRole.MODERATOR, UserRole.ADMIN]
     },
     { 
       label: 'Serviços', 
       path: '/servicos', 
       requireAuth: true,
-      roles: [UserRole.USER, UserRole.MODERATOR, UserRole.ADMIN]
-    },
-    { 
-      label: 'Payment', 
-      path: '/home/payment', 
-      requireAuth: true,
-      roles: [UserRole.USER, UserRole.MODERATOR, UserRole.ADMIN]
-    },
-    { 
-      label: 'Analytics', 
-      path: '/analytics', 
-      requireAuth: true,
-      show: featureFlags.showAnalytics
-    },
-    { 
-      label: 'User Problems', 
-      path: '/usersProblems', 
-      requireAuth: true,
       roles: [UserRole.MODERATOR, UserRole.ADMIN]
     },
+    // Gerente (ADMIN) - Monitoring tools
     { 
-      label: 'Role Management', 
-      path: '/organization/roles', 
+      label: 'Monitoramento', 
+      path: '/analytics', 
       requireAuth: true,
       roles: [UserRole.ADMIN]
     },
     { 
-      label: 'User Monitoring', 
+      label: 'Problemas', 
+      path: '/usersProblems', 
+      requireAuth: true,
+      roles: [UserRole.ADMIN]
+    },
+    { 
+      label: 'Controle de Usuários', 
       path: '/control/users', 
       requireAuth: true,
       roles: [UserRole.ADMIN]
@@ -170,7 +161,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             to="/"
             _hover={{ textDecoration: 'none', color: 'brand.600' }}
           >
-            TemplateV2
+            Oficina Comunitária
           </Text>
 
           {/* Desktop Navigation */}

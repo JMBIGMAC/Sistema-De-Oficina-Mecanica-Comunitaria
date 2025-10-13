@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import UserProfile, Message, MessageReply, MessageSettings, Cliente, Veiculo, Servico
+from .models import UserProfile, Message, MessageReply, MessageSettings, Cliente, Veiculo, Servico, OrdemServico
 
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
@@ -58,3 +58,30 @@ class ServicoAdmin(admin.ModelAdmin):
     list_filter = ['created_at', 'updated_at']
     search_fields = ['descricao']
     readonly_fields = ['created_at', 'updated_at']
+
+@admin.register(OrdemServico)
+class OrdemServicoAdmin(admin.ModelAdmin):
+    list_display = ['id', 'cliente', 'veiculo', 'servico', 'status', 'status_pagamento', 'preco_final', 'data_solicitacao']
+    list_filter = ['status', 'status_pagamento', 'data_solicitacao', 'data_conclusao']
+    search_fields = ['cliente__nome', 'veiculo__placa', 'servico__descricao', 'descricao_problema']
+    readonly_fields = ['data_solicitacao', 'created_at', 'updated_at']
+    
+    fieldsets = (
+        ('Informações Básicas', {
+            'fields': ('cliente', 'veiculo', 'servico')
+        }),
+        ('Detalhes do Serviço', {
+            'fields': ('descricao_problema', 'observacoes', 'preco_final')
+        }),
+        ('Status', {
+            'fields': ('status', 'status_pagamento', 'mecanico_responsavel')
+        }),
+        ('Datas', {
+            'fields': ('data_solicitacao', 'data_aprovacao', 'data_conclusao', 'created_at', 'updated_at')
+        }),
+    )
+    
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.select_related('cliente', 'veiculo', 'servico', 'mecanico_responsavel')
+
