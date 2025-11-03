@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#071031" rx="8"/>
+  <g font-family="Inter, Roboto, Arial, sans-serif" fill="#e2ecff">
+    <text x="48" y="64" font-size="30" font-weight="700">Tela de Gerenciamento de Veículos</text>
+    <text x="48" y="96" font-size="13" opacity="0.8">Placeholder — substitua por captura real</text>
+  </g>
+  <g transform="translate(48,140)" fill="#0b1220">
+    <rect width="1104" height="52" rx="6" fill="#0b1220" stroke="#2b4158"/>
+    <rect y="72" width="1104" height="360" rx="6" fill="#081223" stroke="#172a3d"/>
+  </g>
+  <g fill="#9fb7d9" font-size="14" font-family="Inter, Roboto, Arial, sans-serif">
+    <text x="64" y="180">Placa</text>
+    <text x="180" y="180">Proprietário</text>
+    <text x="420" y="180">Marca / Modelo</text>
+    <text x="720" y="180">Ano</text>
+  </g>
+  <g fill="#94a3b8" font-size="12" font-family="Inter, Roboto, Arial, sans-serif">
+    <text x="48" y="600">Placeholder image — replace after running the app locally and capturing screenshots.</text>
+  </g>
+</svg>

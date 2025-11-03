@@ -2,6 +2,14 @@
 
 Sistema completo de gestão para oficinas mecânicas, desenvolvido com Django REST Framework e React + TypeScript.
 
+## Capturas (placeholders)
+
+As imagens abaixo são placeholders gerados automaticamente no ambiente de desenvolvimento. Preferimos capturas reais do sistema em execução — se quiser, substituo por screenshots reais depois que o frontend estiver rodando localmente.
+
+![Dashboard placeholder](./docs/screenshots/screenshot-1.svg)
+
+![Veículos placeholder](./docs/screenshots/screenshot-2.svg)
+
 ## 📑 Índice
 
 - [Fase 1: Análise e Modelagem de Dados](#fase-1-análise-e-modelagem-de-dados)
